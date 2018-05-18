@@ -1,0 +1,44 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+
+    role_hierarchy:
+        ROLE_API:         ROLE_API
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: ROLE_ADMIN
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+        api_key_user_provider:
+            id: App\Security\ApiKeyUserProvider
+
+    firewalls:
+        api:
+            pattern: ^/api/
+            stateless: true
+            simple_preauth:
+                authenticator: App\Security\ApiKeyAuthenticator
+            provider: api_key_user_provider
+        main:
+            pattern: ^/
+
+            form_login:
+                provider:       fos_userbundle
+                login_path:     sonata_user_admin_security_login
+                use_forward:    true
+                default_target_path: /admin
+                check_path:     sonata_user_admin_security_check
+                failure_path:   null
+
+            logout:       true
+            anonymous:    true
+
+    access_control:
+        - { path: ^/admin/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/api/.*, role: ROLE_API }
+        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

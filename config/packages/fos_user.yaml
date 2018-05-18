@@ -1,0 +1,15 @@
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    user_class:     App\Entity\User
+
+    group:
+        group_class:   App\Entity\Group
+        group_manager: sonata.user.orm.group_manager
+
+    firewall_name: main
+    from_email:
+        address: from
+        sender_name: name
+
+    service:
+        user_manager: sonata.user.orm.user_manager
