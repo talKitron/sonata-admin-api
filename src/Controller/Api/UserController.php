@@ -22,6 +22,7 @@ use Sonata\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sonata\UserBundle\Form\Type\ApiUserType;
 
 class UserController extends BaseUserController implements ContainerAwareInterface {
     private $container;
@@ -394,7 +395,7 @@ class UserController extends BaseUserController implements ContainerAwareInterfa
     protected function handleWriteUser($request, $id = null) {
         $user = $id ? $this->getUser($id) : null;
 
-        $form = $this->formFactory->createNamed(null, 'sonata_user_api_form_user', $user, [
+        $form = $this->formFactory->createNamed(null, ApiUserType::class, $user, [
             'csrf_protection' => false,
         ]);
 
