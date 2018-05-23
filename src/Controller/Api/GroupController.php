@@ -14,6 +14,7 @@ use Nelmio\ApiDocBundle\Annotation\Operation;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Swagger\Annotations as SWG;
 use Sonata\DatagridBundle\Pager\PagerInterface;
+use Sonata\UserBundle\Form\Type\ApiGroupType;
 use Sonata\UserBundle\Model\GroupManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -261,7 +262,7 @@ class GroupController implements ContainerAwareInterface {
         $groupClassName = $this->groupManager->getClass();
         $group = $id ? $this->getGroup($id) : new $groupClassName('');
 
-        $form = $this->formFactory->createNamed(null, 'sonata_user_api_form_group', $group, [
+        $form = $this->formFactory->createNamed(null, ApiGroupType::class, $group, [
             'csrf_protection' => false,
         ]);
 
